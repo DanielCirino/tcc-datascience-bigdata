@@ -1,16 +1,16 @@
+import io
 import PyPDF2
 import pandas as pd
 import requests
-from requests.auth import HTTPProxyAuth
+import html
+import re
 
-DIR_DATASET = r'C:\Users\Daniel.Vale\Personal\PBDDC\TCC\Projeto\datasets\\'
-ARQUIVO_PROPOSICOES = f'{DIR_DATASET}\\despesas_cota_parlamentar.csv'
-proxies = {'https': 'http://bmg%5Cdaniel.vale:Dnl%3D210504@proxybmg:8080',
-           'http': 'http://bmg%5Cdaniel.vale:Dnl%3D210504@proxybmg:8080'}
-
+DIR_DATASET = r'/Users/dev-rocks/Documents/TCC - Data Science e Big Data/Projeto/datasets/'
+ARQUIVO_PROPOSICOES = f'{DIR_DATASET}despesas_cota_parlamentar.csv'
+TAG_HTML = re.compile(r'<[^>]+>')
 
 def normalizarTeorPreposicao(texto: str):
-  pontuacao = ['(', ')', ';', ':', '[', ']', ',', '-', '.', '$', '!', '°', '§', 'º', '/', '"', '\'']
+  pontuacao = ['{', '}','(', ')', ';', ':', '[', ']', ',', '-', '.', '$', '!', '°', '§', 'º', '/', '"', '\'','_','&']
   texto = texto.replace('\\n', ' ')
   for ponto in pontuacao:
     texto = texto.replace(ponto, ' ')
@@ -18,7 +18,7 @@ def normalizarTeorPreposicao(texto: str):
   for numero in range(0, 10):
     texto = texto.replace(str(numero), ' ')
 
-  stopWords = pd.read_csv(f'{DIR_DATASET}\\stop_words.csv', usecols=['stop_words']) \
+  stopWords = pd.read_csv(f'{DIR_DATASET}stop_words.csv', usecols=['stop_words']) \
     .replace(to_replace=[r"\\t|\\n|\\r", "\t|\n|\r"], value=["", ""])
   listaStopWords = stopWords['stop_words'].values.tolist()
   tokens = texto.strip().split()
@@ -32,13 +32,17 @@ def lerDados():
   # open allows you to read the file.
 
   sesssao = requests.Session()
-  sesssao.proxies = proxies
-  sesssao.auth = HTTPProxyAuth('daniel.vale','Dnl%3D10504')
 
-  response = sesssao.get('https://www.camara.leg.br/proposicoesWeb/prop_mostrarintegra?codteor=1862095',
-                          proxies=proxies,auth=('daniel.vale','Dnl%3D210504'))
+  url = 'https://www.camara.leg.br/proposicoesWeb/prop_mostrarintegra?codteor=1720540'
+  response = sesssao.get(url,allow_redirects=True)
 
-  pdfFileObj = open(filename, 'rb')
+  idTeor = url.split('=')[-1]
+  response = sesssao.get(f'https://www.camara.leg.br/internet/ordemdodia/integras/{idTeor}.htm')
+  inteiroTeor = response.text
+
+  x = TAG_HTML.sub('',response.text)
+  y = normalizarTeorPreposicao(x)
+  pdfFileObj = io.BytesIO(response.content)
   # The pdfReader variable is a readable object that will be parsed.
   pdfReader = PyPDF2.PdfFileReader(pdfFileObj)
   # Discerning the number of pages will allow us to parse through all the pages.
