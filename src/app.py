@@ -39,7 +39,7 @@ def prepararDados(usarHashing=True):
   print('_' * 80)
   print(f'Fazendo merge das preposições com as preposicões com temas')
 
-  dfPreposicoesTemas = pd.merge(dfTemas, dfPreposicoes, left_on='uriProposicao', right_on='uri')
+  dfPreposicoesTemas = pd.merge(dfTemas, dfPreposicoes, left_on='uriProposicao', right_on='uri',how=left)
   print(f'Qtd. de proposições com temas: {len(dfPreposicoesTemas)}')
 
   print('_' * 80)
