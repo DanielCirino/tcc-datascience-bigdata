@@ -119,7 +119,6 @@ venv.bak/
 # Rope project settings
 .ropeproject
 
-# mkdocs documentation
 /src
 
 # mypy
@@ -129,5 +128,4 @@ dmypy.json
 
 # Pyre type checker
 .pyre/
-datasets/
 *.tmp
