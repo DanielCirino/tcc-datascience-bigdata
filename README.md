@@ -5,14 +5,14 @@ PONTIFÍCIA UNIVERSIDADE CATÓLICA DE MINAS GERAIS
 
 ### CLASSIFICAÇÃO TEMÁTICA DE PROPOSTAS LEGISLATIVAS APRESENTADAS À CÂMARA DOS DEPUTADOS POR MEIO DA APLICAÇÃO DE MODELOS DE MACHINE LEARNING
 
-####Notebooks
+###Notebooks
 * 02_tcc_obtencao_dados.ipynb
 * 03_tcc_processamento_tratamento_dados.ipynb
 * 04_tcc_analise_exploracao_dados.ipynb
 * 05_tcc_modelo_machine_learning.ipynb
 * 06_tcc_interpretacao_resultados.ipynb
 
-####Datasets
+###Datasets
 Os datasets utilizados no projeto estão disponíveis em:
 https://drive.google.com/drive/folders/1vXlhL8Jjc8xCFW1a1dzj8OJgvxfEoIKJ?usp=sharing
 <br>
